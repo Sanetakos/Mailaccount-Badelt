@@ -98,10 +98,37 @@
             color: white;
             padding: 8px 12px;
             font-size: 15px;
+            letter-spacing: 0.1em;
         }
 
         .password-input::placeholder {
             color: rgba(255, 255, 255, 0.6);
+            letter-spacing: normal;
+        }
+
+        .toggle-password-btn {
+            background-color: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: color 0.2s;
+            flex-shrink: 0;
+            padding: 0;
+        }
+
+        .toggle-password-btn:hover {
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .toggle-password-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
         }
 
         .submit-btn {
@@ -846,6 +873,16 @@
             <div class="username">Klaus Badelt</div>
             <div class="input-group">
                 <input type="password" id="password" class="password-input" placeholder="Kennwort" autocomplete="off" autofocus>
+                <button type="button" id="toggle-password" class="toggle-password-btn" aria-label="Passwort anzeigen/verbergen" title="Passwort anzeigen">
+                    <!-- Eye icon (closed) -->
+                    <svg id="eye-icon-closed" viewBox="0 0 24 24" style="display: block;">
+                        <path d="M11.83,9L15.23,15.79C15.75,15.13 16.12,14.3 16.12,13.37A4.12,4.12 0 0,0 12,9.25C11.69,9.25 11.39,9.3 11.83,9M7.08,9.81C6.85,10.36 6.72,10.97 6.72,11.63A5.1,5.1 0 0,0 11.82,16.73C12.48,16.73 13.1,16.6 13.65,16.36M19.58,16.64C21.38,14.84 22.54,12.37 22.54,10.5C22.54,5.8 17.35,2 12,2C10.21,2 8.55,2.54 7.2,3.44L8.64,5C9.57,4.29 10.72,3.83 12,3.83C16.15,3.83 19.67,6.61 19.67,10.14C19.67,11.39 19.2,12.55 18.43,13.41L19.58,16.64M2,4.27L4.28,8.3L4.73,13.73C4.73,13.73 3,15.06 3,17C3,18.82 4.18,20.29 5.5,20.29C6.04,20.29 6.54,20.04 6.88,19.63L8.14,21.15C7.3,21.62 6.27,21.9 5.5,21.9C3.09,21.9 1.5,20.42 1.5,18.64C1.5,17.77 1.78,16.96 2.26,16.3L2,4.27Z" />
+                    </svg>
+                    <!-- Eye icon (open) -->
+                    <svg id="eye-icon-open" viewBox="0 0 24 24" style="display: none;">
+                        <path d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
+                    </svg>
+                </button>
                 <button type="button" id="login-submit" class="submit-btn" aria-label="Anmelden">
                     <svg viewBox="0 0 24 24">
                         <path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
@@ -1194,8 +1231,31 @@ Druckerei Schmidt GmbH</div>
     </div>
 
     <script>
-        // Password validation logic
+        // Password visibility toggle
         const passwordInput = document.getElementById('password');
+        const togglePasswordBtn = document.getElementById('toggle-password');
+        const eyeIconClosed = document.getElementById('eye-icon-closed');
+        const eyeIconOpen = document.getElementById('eye-icon-open');
+        let passwordVisible = false;
+
+        togglePasswordBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            passwordVisible = !passwordVisible;
+
+            if (passwordVisible) {
+                passwordInput.type = 'text';
+                eyeIconClosed.style.display = 'none';
+                eyeIconOpen.style.display = 'block';
+                togglePasswordBtn.title = 'Passwort verbergen';
+            } else {
+                passwordInput.type = 'password';
+                eyeIconClosed.style.display = 'block';
+                eyeIconOpen.style.display = 'none';
+                togglePasswordBtn.title = 'Passwort anzeigen';
+            }
+        });
+
+        // Password validation logic
         const loginSubmit = document.getElementById('login-submit');
         const loginScreen = document.getElementById('login-screen');
         const errorMsg = document.getElementById('error-msg');
